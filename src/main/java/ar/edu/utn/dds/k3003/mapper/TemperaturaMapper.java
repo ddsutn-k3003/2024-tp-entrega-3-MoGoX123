@@ -4,6 +4,7 @@ import ar.edu.utn.dds.k3003.facades.dtos.TemperaturaDTO;
 import ar.edu.utn.dds.k3003.model.Heladera;
 import ar.edu.utn.dds.k3003.model.RegistroTemperatura;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +25,6 @@ public class TemperaturaMapper {
 
   public RegistroTemperatura DTOtoOrigin(TemperaturaDTO temperaturaDTO) {
 
-    return new RegistroTemperatura(temperaturaDTO.getFechaMedicion(), temperaturaDTO.getTemperatura());
+    return new RegistroTemperatura(LocalDateTime.now(), temperaturaDTO.getTemperatura());
   }
 }
