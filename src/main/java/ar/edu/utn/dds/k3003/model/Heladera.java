@@ -1,7 +1,7 @@
 package ar.edu.utn.dds.k3003.model;
 
+import ar.edu.utn.dds.k3003.base.PersistenceClass;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
 @Data
 @Entity
 @Table(name = "heladera")
-public class Heladera extends PersistenceClass{
+public class Heladera extends PersistenceClass {
 
   @Column
   private String nombre;
@@ -24,8 +24,9 @@ public class Heladera extends PersistenceClass{
   @Column
   private LocalDateTime ultimaVezAbierto;
 
-  @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-  private List<RegistroTemperatura> registroTemperaturas;
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+  @JoinColumn(name = "heladera_id")  // Esta columna se agrega a la tabla RegistroTemperatura
+  private List<RegistroTemperatura> registrosTemperatura;
 
   public Heladera(){
     super();
@@ -36,7 +37,7 @@ public class Heladera extends PersistenceClass{
     this.cantViandas = 0;
     this.activa = true;
     this.ultimaVezAbierto = LocalDateTime.now();
-    this.registroTemperaturas = new ArrayList<>();
+    this.registrosTemperatura = new ArrayList<>();
   }
 
   public void addVianda() {
@@ -54,8 +55,7 @@ public class Heladera extends PersistenceClass{
   }
 
   public void AgregarTemperatura(RegistroTemperatura registroTemperatura) {
-    this.registroTemperaturas.add(new RegistroTemperatura(registroTemperatura.getFechaMedicion(), registroTemperatura.getTemperatura()));
-    this.registroTemperaturas.sort((registroTemperatura1, registroTemperatura2)
-        -> ChronoLocalDateTime.timeLineOrder().compare(registroTemperatura2.getFechaMedicion(), registroTemperatura1.getFechaMedicion()));
+    this.registrosTemperatura
+            .add(new RegistroTemperatura(registroTemperatura.getFechaMedicion(), registroTemperatura.getTemperatura()));
   }
 }

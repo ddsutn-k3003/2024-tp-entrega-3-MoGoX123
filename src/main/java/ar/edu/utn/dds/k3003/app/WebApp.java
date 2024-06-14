@@ -6,6 +6,7 @@ import ar.edu.utn.dds.k3003.controllers.TemperaturaController;
 import ar.edu.utn.dds.k3003.controllers.ViandaController;
 import ar.edu.utn.dds.k3003.facades.dtos.HeladeraDTO;
 import io.javalin.Javalin;
+import io.javalin.http.Handler;
 
 import static ar.edu.utn.dds.k3003.Evaluador.createObjectMapper;
 
@@ -29,6 +30,9 @@ public class WebApp {
 
     // LLAMADAS-------------------------------------------------------------------------------------
 
+    // Resetear DB
+    app.get("/cleanup", heladeraController::cleanAll);
+
     // Devolver Heladeras
     app.get("/heladeras", heladeraController::getHeladeras);
 
@@ -49,7 +53,6 @@ public class WebApp {
 
     // Registrar temperatura
     app.get("/heladeras/{heladeraId}/temperaturas", temperaturaController::allTemperatura);
-
   }
 
 }

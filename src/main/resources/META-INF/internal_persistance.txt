@@ -8,9 +8,9 @@ http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd" version="2.2">
         <class>ar.edu.utn.dds.k3003.model.RegistroTemperatura</class>
 
         <properties>
-            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://dpg-cpke91sf7o1s73cnma6g-a.oregon-postgres.render.com/db_diseno_mogox123"/>
-            <property name="javax.persistence.jdbc.user" value="db_diseno_mogox123_user"/>
-            <property name="javax.persistence.jdbc.password" value="hO0d0J6XcN8OrP7cSbC8jR7zGUQtFIqt"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5433/heladerasPU"/>
+            <property name="javax.persistence.jdbc.user" value="postgres"/>
+            <property name="javax.persistence.jdbc.password" value="1234"/>
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
 
             <property name="hibernate.hbm2ddl.auto" value="update"/>

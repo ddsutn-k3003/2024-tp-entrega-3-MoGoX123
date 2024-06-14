@@ -48,6 +48,7 @@ public class FachadaTest {
 
     fachadaHeladera = new Fachada();
     fachadaHeladera.setViandasProxy(fachadaViandas);
+    fachadaHeladera.cleanAll();
 
     heladeraDTOTest1 = new HeladeraDTO(null, "Heladera Medrano UTN", 0);
     heladeraDTOTest2 = new HeladeraDTO(null, "Heladera Campus UTN", 0);
@@ -83,8 +84,12 @@ public class FachadaTest {
 
     fachadaHeladera.depositar(heladeraAgregada1.getId(), "vianda1");
 
-    Heladera heladera1 = repoHeladera.findById(Long.valueOf(heladeraAgregada1.getId()));
-    Heladera heladera2 = repoHeladera.findById(Long.valueOf(heladeraAgregada2.getId()));
+    Heladera heladera1 = repoHeladera
+            .findById(Long.valueOf(heladeraAgregada1.getId()))
+            .orElseThrow(() -> new NoSuchElementException("Heladera not found for id: " + heladeraAgregada1.getId()));
+    Heladera heladera2 = repoHeladera
+            .findById(Long.valueOf(heladeraAgregada2.getId()))
+            .orElseThrow(() -> new NoSuchElementException("Heladera not found for id: " + heladeraAgregada2.getId()));
 
     assertEquals(1, fachadaHeladera.cantidadViandas(Math.toIntExact(heladera1.getId())));
     assertEquals(0, fachadaHeladera.cantidadViandas(Math.toIntExact(heladera2.getId())));
@@ -92,8 +97,12 @@ public class FachadaTest {
     fachadaHeladera.depositar(heladeraAgregada2.getId(), "vianda1");
     fachadaHeladera.depositar(heladeraAgregada1.getId(), "vianda1");
 
-    heladera1 = repoHeladera.findById(Long.valueOf(heladeraAgregada1.getId()));
-    heladera2 = repoHeladera.findById(Long.valueOf(heladeraAgregada2.getId()));
+    heladera1 = repoHeladera
+            .findById(Long.valueOf(heladeraAgregada1.getId()))
+            .orElseThrow(() -> new NoSuchElementException("Heladera not found for id: " + heladeraAgregada1.getId()));
+    heladera2 = repoHeladera
+            .findById(Long.valueOf(heladeraAgregada2.getId()))
+            .orElseThrow(() -> new NoSuchElementException("Heladera not found for id: " + heladeraAgregada2.getId()));
 
     assertEquals(2, fachadaHeladera.cantidadViandas(Math.toIntExact(heladera1.getId())));
     assertEquals(1, fachadaHeladera.cantidadViandas(Math.toIntExact(heladera2.getId())));
@@ -123,8 +132,12 @@ public class FachadaTest {
     fachadaHeladera.retirar(retiroDTOHeladera1Existente);
     fachadaHeladera.retirar(retiroDTOHeladera2Existente);
 
-    Heladera heladera1 = repoHeladera.findById(Long.valueOf(heladeraAgregada1.getId()));
-    Heladera heladera2 = repoHeladera.findById(Long.valueOf(heladeraAgregada2.getId()));
+    Heladera heladera1 = repoHeladera
+            .findById(Long.valueOf(heladeraAgregada1.getId()))
+            .orElseThrow(() -> new NoSuchElementException("Heladera not found for id: " + heladeraAgregada2.getId()));
+    Heladera heladera2 = repoHeladera
+            .findById(Long.valueOf(heladeraAgregada2.getId()))
+            .orElseThrow(() -> new NoSuchElementException("Heladera not found for id: " + heladeraAgregada2.getId()));
 
     assertEquals(1, fachadaHeladera.cantidadViandas(Math.toIntExact(heladera1.getId())));
     assertEquals(0, fachadaHeladera.cantidadViandas(Math.toIntExact(heladera2.getId())));
@@ -152,7 +165,9 @@ public class FachadaTest {
 
     // Se ejecuta aunque haya excepcion
     assertDoesNotThrow(() -> {
-      Heladera heladera1 = repoHeladera.findById(Long.valueOf(heladeraAgregada1.getId()));
+      Heladera heladera1 = repoHeladera
+              .findById(Long.valueOf(heladeraAgregada1.getId()))
+              .orElseThrow(() -> new NoSuchElementException("Heladera not found for id: " + heladeraAgregada2.getId()));
       assertEquals(2, fachadaHeladera.cantidadViandas(Math.toIntExact(heladera1.getId())));
     });
   }
@@ -217,6 +232,32 @@ public class FachadaTest {
       assertEquals(0, fachadaHeladera.obtenerTemperaturas(heladeraAgregada3.getId()).size());
     });
 
+  }
+
+  @Test
+  void resetearDB(){
+
+    LocalDateTime tiempo = LocalDateTime.of(2000, 1, 1, 10, 0);
+
+    HeladeraDTO heladeraAgregada1 = fachadaHeladera.agregar(heladeraDTOTest1);
+    HeladeraDTO heladeraAgregada2 = fachadaHeladera.agregar(heladeraDTOTest2);
+
+    TemperaturaDTO temperaturaDTO1 = new TemperaturaDTO(10, heladeraAgregada1.getId(), tiempo.plusMinutes(5));
+    TemperaturaDTO temperaturaDTO2 = new TemperaturaDTO(1, heladeraAgregada1.getId(), tiempo.plusMinutes(10));
+
+    TemperaturaDTO temperaturaDTO3 = new TemperaturaDTO(-18, heladeraAgregada2.getId(), tiempo.plusMinutes(15));
+
+    fachadaHeladera.temperatura(temperaturaDTO1);
+    fachadaHeladera.temperatura(temperaturaDTO2);
+
+    fachadaHeladera.temperatura(temperaturaDTO3);
+
+    assertEquals(2, fachadaHeladera.obtenerHeladeras().size());
+    assertEquals(2, fachadaHeladera.obtenerTemperaturas(heladeraAgregada1.getId()).size());
+    assertEquals(1, fachadaHeladera.obtenerTemperaturas(heladeraAgregada2.getId()).size());
+
+    fachadaHeladera.cleanAll();
+    assertEquals(0, fachadaHeladera.obtenerHeladeras().size());
   }
 
 

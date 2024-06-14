@@ -21,11 +21,12 @@ public class TemperaturaController {
       context.status(200).result("Temperatura registrada correctamente");
     }
     catch (NoSuchElementException e){
-      context.status(400).result("Error de solicitud");
+      e.printStackTrace();
+      context.status(400).result("Error de solicitud " + e.getMessage());
     }
     catch (Exception e){
       e.printStackTrace();
-      context.status(500).result("Error interno");
+      context.status(500).result("Error interno " + e.getMessage());
     }
 
   }
@@ -37,11 +38,11 @@ public class TemperaturaController {
       context.status(200).json(fachadaHeladera.obtenerTemperaturas(id));
     }
     catch (NoSuchElementException e){
-      context.status(400).result("Heladera no encontrada");
+      context.status(400).result("Heladera no encontrada " + e.getMessage());
     }
     catch (Exception e){
       e.printStackTrace();
-      context.status(500).result("Error interno");
+      context.status(500).result("Error interno " + e.getMessage());
     }
 
   }

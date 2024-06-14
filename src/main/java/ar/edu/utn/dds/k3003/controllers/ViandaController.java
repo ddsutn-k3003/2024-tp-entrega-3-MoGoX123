@@ -25,11 +25,11 @@ public class ViandaController {
     }
     catch (NoSuchElementException e){
       e.printStackTrace();
-      context.status(400).result("Error de solicitud");
+      context.status(400).result("Error de solicitud " + e.getMessage());
     }
     catch (Exception e){
       e.printStackTrace();
-      context.status(500).result("Error interno");
+      context.status(500).result("Error interno " + e.getMessage());
     }
 
   }
@@ -41,11 +41,11 @@ public class ViandaController {
       context.status(200).result("Vianda retirada correctamente");
     }
     catch (NoSuchElementException e){
-      context.status(400).result("Error de solicitud");
+      context.status(400).result("Error de solicitud " + e.getMessage());
     }
     catch (Exception e){
       e.printStackTrace();
-      context.status(500).result("Error interno");
+      context.status(500).result("Error interno " + e.getMessage());
     }
   }
 }

@@ -22,7 +22,7 @@ public class HeladeraController {
       ctx.status(200).json(fachada.obtenerHeladeras());
     }
     catch (Exception e){
-      ctx.status(500).result("Error interno");
+      ctx.status(500).result("Error interno " + e.getMessage());
     }
 
   }
@@ -34,7 +34,7 @@ public class HeladeraController {
     }
     catch (Exception e){
       e.printStackTrace();
-      ctx.status(400).result("Error de solicitud");
+      ctx.status(400).result("Error de solicitud " + e.getMessage());
     }
 
   }
@@ -48,11 +48,25 @@ public class HeladeraController {
       ctx.status(200).json(heladeraDTO);
     }
     catch (NoSuchElementException e){
-      ctx.status(404).result("Heladera no encontrada");
+      ctx.status(404).result("Heladera no encontrada " + e.getMessage());
     }
     catch (Exception e){
       e.printStackTrace();
-      ctx.status(500).result("Error interno");
+      ctx.status(500).result("Error interno " + e.getMessage());
+    }
+
+  }
+
+  public void cleanAll(Context context) {
+
+    boolean status = fachada.cleanAll();
+
+    if(status){
+
+      context.status(200).result("Base de datos reseteada!");
+    }else {
+
+      context.status(500).result("Error Base de datos, no borrada...");
     }
 
   }

@@ -1,6 +1,7 @@
 package ar.edu.utn.dds.k3003.mapper;
 
 import ar.edu.utn.dds.k3003.facades.dtos.TemperaturaDTO;
+import ar.edu.utn.dds.k3003.model.Heladera;
 import ar.edu.utn.dds.k3003.model.RegistroTemperatura;
 
 import java.util.List;

@@ -38,7 +38,10 @@ public class Fachada implements ar.edu.utn.dds.k3003.facades.FachadaHeladeras{
   @Override
   public void depositar(Integer heladeraId, String qrVianda) throws NoSuchElementException {
 
-    Heladera heladera = this.repoHeladera.findById(Long.valueOf(heladeraId));
+    Heladera heladera = this.repoHeladera
+            .findById(Long.valueOf(heladeraId))
+            .orElseThrow(() -> new NoSuchElementException("Heladera not found for id: " + heladeraId));
+
     ViandaDTO viandaDTO = this.fachadaViandas.buscarXQR(qrVianda);
 
     this.fachadaViandas.modificarEstado(viandaDTO.getCodigoQR(), EstadoViandaEnum.DEPOSITADA);
@@ -50,7 +53,9 @@ public class Fachada implements ar.edu.utn.dds.k3003.facades.FachadaHeladeras{
   @Override
   public void retirar(RetiroDTO retiroDTO) throws NoSuchElementException {
 
-    Heladera heladera = this.repoHeladera.findById(Long.valueOf(retiroDTO.getHeladeraId()));
+    Heladera heladera = this.repoHeladera
+            .findById(Long.valueOf(retiroDTO.getHeladeraId()))
+            .orElseThrow(() -> new NoSuchElementException("Heladera not found for id: " + retiroDTO.getHeladeraId()));
     ViandaDTO viandaDTO = this.fachadaViandas.buscarXQR(retiroDTO.getQrVianda());
 
     this.fachadaViandas.modificarEstado(viandaDTO.getCodigoQR(), EstadoViandaEnum.RETIRADA);
@@ -62,7 +67,9 @@ public class Fachada implements ar.edu.utn.dds.k3003.facades.FachadaHeladeras{
   @Override
   public Integer cantidadViandas(Integer heladeraId) throws NoSuchElementException {
 
-    Heladera heladera = this.repoHeladera.findById(Long.valueOf(heladeraId));
+    Heladera heladera = this.repoHeladera
+            .findById(Long.valueOf(heladeraId))
+            .orElseThrow(() -> new NoSuchElementException("Heladera not found for id: " + heladeraId));
     return heladera.getCantViandas();
   }
 
@@ -70,9 +77,12 @@ public class Fachada implements ar.edu.utn.dds.k3003.facades.FachadaHeladeras{
   public void temperatura(TemperaturaDTO temperaturaDTO) throws NoSuchElementException{
 
     try {
-      Heladera heladera = this.repoHeladera.findById(Long.valueOf(temperaturaDTO.getHeladeraId()));
+      Heladera heladera = this.repoHeladera
+              .findById(Long.valueOf(temperaturaDTO.getHeladeraId()))
+              .orElseThrow(() -> new NoSuchElementException("Heladera not found for id: " + temperaturaDTO.getHeladeraId()));
       heladera.AgregarTemperatura(temperaturaMapper.DTOtoOrigin(temperaturaDTO));
       this.repoHeladera.update(heladera);
+
     } catch (Exception e){
       throw new NoSuchElementException();
     }
@@ -82,9 +92,11 @@ public class Fachada implements ar.edu.utn.dds.k3003.facades.FachadaHeladeras{
   @Override
   public List<TemperaturaDTO> obtenerTemperaturas(Integer heladeraId) {
 
-    Heladera heladera = this.repoHeladera.findById(Long.valueOf(heladeraId));
+    Heladera heladera = this.repoHeladera
+            .findById(Long.valueOf(heladeraId))
+            .orElseThrow(() -> new NoSuchElementException("Heladera not found for id: " + heladeraId));
 
-    return temperaturaMapper.listOriginToListDTO(heladera.getRegistroTemperaturas(), heladera.getId());
+    return temperaturaMapper.listOriginToListDTO(heladera.getRegistrosTemperatura(), heladera.getId());
   }
 
   @Override
@@ -94,11 +106,21 @@ public class Fachada implements ar.edu.utn.dds.k3003.facades.FachadaHeladeras{
 
   public HeladeraDTO obtenerHeladeraPorId(Long id) throws NoSuchElementException{
 
-    return heladeraMapper.originToDTO(this.repoHeladera.findById(id));
+    Heladera heladera = this.repoHeladera.findById(id)
+            .orElseThrow(() -> new NoSuchElementException("Heladera not found for id: " + id));
+
+    return heladeraMapper.originToDTO(heladera);
   }
 
   public List<HeladeraDTO> obtenerHeladeras() {
 
     return heladeraMapper.originToListDTO(this.repoHeladera.findAll());
+  }
+
+  public Boolean cleanAll() {
+
+    repoHeladera.findAll().forEach(heladera -> repoHeladera.delete(heladera));
+
+    return repoHeladera.findAll().isEmpty();
   }
 }

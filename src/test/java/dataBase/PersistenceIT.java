@@ -3,13 +3,7 @@ package dataBase;
 import ar.edu.utn.dds.k3003.db.EntityManagerHelper;
 import ar.edu.utn.dds.k3003.model.Heladera;
 import ar.edu.utn.dds.k3003.model.RegistroTemperatura;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 import java.time.LocalDateTime;
 
@@ -55,7 +49,7 @@ public class PersistenceIT {
 
         assertEquals(heladera1.getNombre(), heladera3.getNombre());
         assertEquals(3, heladera3.getCantViandas());
-        assertEquals(2, heladera3.getRegistroTemperaturas().size());
+        assertEquals(2, heladera3.getRegistrosTemperatura().size());
         EntityManagerHelper.closeEntityManager();
     }
 

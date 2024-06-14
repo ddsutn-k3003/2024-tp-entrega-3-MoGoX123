@@ -1,11 +1,11 @@
-package ar.edu.utn.dds.k3003.repository;
+package ar.edu.utn.dds.k3003.base;
 
 import ar.edu.utn.dds.k3003.db.EntityManagerHelper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Optional;
 
 public class Repository<T> {
 
@@ -30,10 +30,10 @@ public class Repository<T> {
         }
     }
 
-    public T findById(Object id) {
+    public Optional<T> findById(Object id) {
         EntityManager em = EntityManagerHelper.getEntityManager();
         try {
-            return em.find(entityClass, id);
+            return Optional.ofNullable(em.find(entityClass, id));
         } finally {
             EntityManagerHelper.closeEntityManager();
         }
