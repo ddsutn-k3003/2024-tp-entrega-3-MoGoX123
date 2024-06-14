@@ -1,8 +1,8 @@
 package ar.edu.utn.dds.k3003.controllers;
 
 import ar.edu.utn.dds.k3003.app.Fachada;
-import ar.edu.utn.dds.k3003.auxResource.DTOs.ViandaDTOAux;
 import ar.edu.utn.dds.k3003.facades.dtos.RetiroDTO;
+import ar.edu.utn.dds.k3003.facades.dtos.ViandaDTO;
 import io.javalin.http.Context;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,8 +19,8 @@ public class ViandaController {
   public void addVianda(@NotNull Context context) {
 
     try {
-      ViandaDTOAux viandaDTOAux = context.bodyAsClass(ViandaDTOAux.class);
-      fachadaHeladera.depositar(Math.toIntExact(viandaDTOAux.getHeladeraId()), viandaDTOAux.getQrVianda());
+      ViandaDTO viandaDTO = context.bodyAsClass(ViandaDTO.class);
+      fachadaHeladera.depositar(Math.toIntExact(viandaDTO.getHeladeraId()), viandaDTO.getCodigoQR());
       context.status(200).result("Vianda depositada correctamente");
     }
     catch (NoSuchElementException e){

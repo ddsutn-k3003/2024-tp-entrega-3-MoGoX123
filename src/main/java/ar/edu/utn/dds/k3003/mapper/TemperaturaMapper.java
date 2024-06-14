@@ -11,7 +11,8 @@ public class TemperaturaMapper {
 
   public TemperaturaDTO originToDTO(RegistroTemperatura registro, Long idHeladera) {
     return new TemperaturaDTO(Math.toIntExact(registro.getTemperatura()),
-        Math.toIntExact(idHeladera), registro.getFechaMedicion());
+            Math.toIntExact(idHeladera),
+            registro.getFechaMedicion());
   }
 
   public List<TemperaturaDTO> listOriginToListDTO(List<RegistroTemperatura> registroTemperaturas, Long heladeraId) {
